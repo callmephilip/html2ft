@@ -1,0 +1,57 @@
+{
+  "name": "html2ft",
+  "displayName": "html2ft",
+  "description": "Convert HTML to FastHTML FT",
+  "version": "0.1.0",
+  "publisher": "PhilipNuzhnyi",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "html2ft.convert",
+        "title": "Convert to FastHTML FT"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "html2ft.convert",
+          "when": "resourceLangId == python && editorHasSelection",
+          "group": "modification@2"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@types/node-fetch": "2",
+    "@types/vscode": "^1.93.0",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.9.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "he": "^1.2.0",
+    "node-fetch": "2"
+  }
+}
