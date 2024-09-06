@@ -2,6 +2,8 @@
 
 This extension converts HTML code to FT Python code to use with FastHTML
 
+![Screenshot](./images/screenshot.jpg)
+
 ## Requirements
 
 This extension currently relies on https://h2x.answer.ai/
