@@ -1,44 +1,122 @@
-import fetch from "node-fetch";
-const he = require("he");
+import { JSDOM } from "jsdom";
 
-export const html2ft = async (
-  html: string,
-  childrenFirst: boolean = true,
-  apiURL: string = "https://h2x.answer.ai/convert"
-): Promise<string> => {
-  const formData = new URLSearchParams();
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-  formData.append("attr1st", childrenFirst ? "0" : "1");
-  formData.append("html", html);
+export function html2ft(html: string, attr1st: boolean = false): string {
+  const revMap: { [key: string]: string } = { class: "cls", for: "fr" };
 
-  return fetch(apiURL, {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.text())
-    .then((r) => {
-      // make sure this regex works with multiline strings
-      // const code = r.match(/<code>(.*?)<\/code>/m);
-      const code = r.match(/<code>([\s\S]*?)<\/code>/m);
-      if (code) {
-        return he.decode(code[1]);
-      } else {
-        throw new Error("Failed to convert HTML to FT");
+  const dom = new JSDOM(html.trim());
+
+  function _parse(
+    elm: any,
+    lvl: number = 0,
+    indent: number = 4
+  ): string | null {
+    if (typeof elm === "string") {
+      return elm && elm.trim().length !== 0 ? JSON.stringify(elm.trim()) : null;
+    }
+
+    if (Array.isArray(elm)) {
+      return elm
+        .map((o) => _parse(o, lvl))
+        .filter((el) => el)
+        .join("\n");
+    }
+
+    if (!(elm instanceof dom.window.Element)) {
+      return null;
+    }
+
+    if (elm.nodeType === 8) {
+      // 8 is the nodeType for comments
+      return null;
+    }
+
+    const tagName = elm.tagName.toLowerCase().replace(/-/g, "_");
+
+    const cts = Array.from(elm.childNodes);
+    const cs = cts
+      .map((c) =>
+        c instanceof dom.window.Text
+          ? c.textContent?.trim().length
+            ? JSON.stringify(c.textContent?.trim())
+            : null
+          : _parse(c, lvl + 1)
+      )
+      .filter((c) => c);
+
+    const attrs: string[] = [];
+    const elmAttrs = elm
+      .getAttributeNames()
+      // class goes last
+      .sort((a, b) => (a === "class" ? 1 : b === "class" ? -1 : 0));
+
+    for (const key of elmAttrs) {
+      const value = elm.getAttribute(key);
+      if (value === null) {
+        continue;
       }
 
-      //   extract code from response below
-      //       <pre>
-      //         <code>
-      //           Figure( Img(src=&#x27;/sarah-dayan.jpg&#x27;, alt=&#x27;&#x27;,
-      //           width=&#x27;384&#x27;, height=&#x27;512&#x27;, cls=&#x27;w-24 h-24
-      //           rounded-full mx-auto&#x27;), Div( Blockquote( P(&quot;“Tailwind CSS is
-      //           the only framework that I&#x27;ve seen scale\r\n\t\t\t\ton large
-      //           teams. It’s easy to customize, adapts to any design,\r\n\t\t\t\tand
-      //           the build size is tiny.”&quot;, cls=&#x27;text-lg font-medium&#x27;)
-      //           ), Figcaption( Div(&#x27;Sarah Dayan&#x27;), Div(&#x27;Staff Engineer,
-      //           Algolia&#x27;) ), cls=&#x27;pt-6 space-y-4&#x27; ),
-      //           cls=&#x27;bg-slate-100 rounded-xl p-8 dark:bg-slate-800&#x27; )
-      //         </code>
-      //       </pre>
-    });
-};
+      const mappedKey = revMap[key] || key;
+      const formattedKey = mappedKey.replace(/-/g, "_");
+
+      if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(formattedKey)) {
+        attrs.push(
+          `${formattedKey}=${JSON.stringify(value).replaceAll('"', "'")}`
+        );
+      } else {
+        attrs.push(
+          `**{${JSON.stringify(key)}: ${JSON.stringify(value).replaceAll(
+            '"',
+            "'"
+          )}}`
+        );
+      }
+    }
+
+    const spc = " ".repeat(lvl * indent);
+    const onlychild =
+      !cts.length || (cts.length === 1 && cts[0] instanceof dom.window.Text);
+    const j = onlychild ? ", " : `,\n${spc}`;
+    const inner = [...cs, ...attrs].filter(Boolean).join(j);
+
+    if (onlychild) {
+      return `${capitalize(tagName)}(${inner})`;
+    }
+
+    if (!attr1st || attrs.length === 0) {
+      return `${capitalize(tagName)}(\n${spc}${inner}\n${" ".repeat(
+        (lvl - 1) * indent
+      )})`;
+    }
+
+    const innerCs = cs.filter(Boolean).join(j);
+    const innerAttrs = attrs.join(", ");
+
+    return `${capitalize(
+      tagName
+    )}(${innerAttrs})(\n${spc}${innerCs}\n${" ".repeat((lvl - 1) * indent)})`;
+  }
+
+  // figure out what actual input should be
+  // jsdom will include all the standard html tags (html, head, body)
+  // even if original HTML do not have them
+  // our mission here is to clean things up
+
+  // by default, send everything
+  let input: any = Array.from(dom.window.document.body.childNodes);
+
+  if (html.match(/html/gi)) {
+    input = Array.from(dom.window.document.childNodes);
+  } else if (html.match(/body/gi)) {
+    input = [];
+
+    if (dom.window.document.head) {
+      input.push(dom.window.document.head);
+    }
+
+    input.push(dom.window.document.body);
+  }
+
+  return _parse(input, 1) || "";
+}

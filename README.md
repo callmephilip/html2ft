@@ -6,7 +6,7 @@ This extension converts HTML code to FT Python code to use with FastHTML
 
 ## Requirements
 
-This extension currently relies on https://h2x.answer.ai/
+None
 
 ## Extension Settings
 
@@ -23,3 +23,7 @@ Users appreciate release notes as you update your extension.
 ### 0.1.0
 
 Initial release
+
+### 0.2.0
+
+Run conversion locally 
