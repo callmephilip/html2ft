@@ -37,9 +37,10 @@
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vitest"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.7",
     "@types/mocha": "^10.0.7",
     "@types/node": "~20.16.5",
     "@types/node-fetch": "^2.6.11",
@@ -49,10 +50,10 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.10.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
   "dependencies": {
-    "he": "^1.2.0",
-    "node-fetch": "^2.7.0"
+    "jsdom": "^25.0.0"
   }
 }

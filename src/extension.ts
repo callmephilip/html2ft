@@ -20,22 +20,18 @@ export function activate(context: vscode.ExtensionContext) {
       const selection = editor.selection;
       const originalText = document.getText(selection);
 
-      editor.edit((editBuilder) => {
-        editBuilder.replace(selection, "Working on it... 👨‍🏭");
-      });
-
-      html2ft(originalText)
-        .then((convertedText) => {
-          editor.edit((editBuilder) => {
-            editBuilder.replace(selection, convertedText);
-          });
-        })
-        .catch((error) => {
-          vscode.window.showErrorMessage("Failed to convert HTML to FT");
-          editor.edit((editBuilder) => {
-            editBuilder.replace(selection, originalText);
-          });
+      try {
+        const convertedText = html2ft(originalText);
+        editor.edit((editBuilder) => {
+          editBuilder.replace(selection, convertedText);
         });
+      } catch (error) {
+        console.error(error);
+        vscode.window.showErrorMessage("Failed to convert HTML to FT");
+        editor.edit((editBuilder) => {
+          editBuilder.replace(selection, originalText);
+        });
+      }
     })
   );
 }
