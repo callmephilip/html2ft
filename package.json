@@ -2,7 +2,7 @@
   "name": "html2ft",
   "displayName": "html2ft",
   "description": "Convert HTML to FastHTML FT",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "publisher": "PhilipNuzhnyi",
   "repository": "https://github.com/callmephilip/html2ft",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
