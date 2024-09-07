@@ -18,6 +18,7 @@ async function main() {
     plugins: [
       /* add to the end of plugins array */
       esbuildProblemMatcherPlugin,
+      jsdomPatch,
     ],
   });
   if (watch) {
@@ -27,6 +28,22 @@ async function main() {
     await ctx.dispose();
   }
 }
+
+const jsdomPatch = {
+  name: "jsdom-patch",
+  setup(build) {
+    build.onLoad({ filter: /XMLHttpRequest-impl\.js$/ }, async (args) => {
+      let contents = await fs.promises.readFile(args.path, "utf8");
+      contents = contents.replace(
+        'const syncWorkerFile = require.resolve ? require.resolve("./xhr-sync-worker.js") : null;',
+        `const syncWorkerFile = "${await requireResolve(
+          "jsdom/lib/jsdom/living/xhr/xhr-sync-worker.js"
+        )}";`.replaceAll("\\", process.platform === "win32" ? "\\\\" : "\\")
+      );
+      return { contents, loader: "js" };
+    });
+  },
+};
 
 /**
  * @type {import('esbuild').Plugin}
