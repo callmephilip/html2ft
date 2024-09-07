@@ -2,7 +2,7 @@
   "name": "html2ft",
   "displayName": "html2ft",
   "description": "Convert HTML to FastHTML FT",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "publisher": "PhilipNuzhnyi",
   "repository": "https://github.com/callmephilip/html2ft",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": "./dist/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
@@ -42,9 +42,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
-    "package": "npm run compile && node esbuild.js --production",
-    "compile": "tsc -p ./ && node esbuild.js",
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src",
@@ -62,10 +61,14 @@
     "@vscode/test-electron": "^2.4.1",
     "esbuild": "^0.23.1",
     "eslint": "^9.10.0",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "vitest": "^2.0.5",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "cheerio": "^1.0.0",
     "jsdom": "^25.0.0"
   }
 }
