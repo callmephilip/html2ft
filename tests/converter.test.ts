@@ -133,6 +133,43 @@ Body(
     P("This is a paragraph.")
 )`,
   },
+  {
+    description: "multiline class attribute",
+    input: `<div class="fixed top-0 left-0 h-full w-64 
+                bg-white shadow-lg overflow-y-auto
+                transform -translate-x-full 
+                transition-transform duration-300
+                ease-in-out z-50">
+        <div class="p-6">
+            <div class="text-center mb-4">
+                <img src=
+"https://media.geeksforgeeks.org/wp-content/uploads/20240429130139/employee.png"
+                     alt="Profile Picture" 
+                     class="rounded-full 
+                            mx-auto mb-2">
+                <h3 class="text-lg font-semibold">
+                    Sahil Trivedi
+                </h3>
+                <p class="text-gray-600">
+                    Web Developer
+                </p>
+            </div>
+        </div>
+</div>`,
+    attr1st: false,
+    expected: `Div(
+    Div(
+        Div(
+            Img(src='https://media.geeksforgeeks.org/wp-content/uploads/20240429130139/employee.png', alt='Profile Picture', cls='rounded-full mx-auto mb-2'),
+            H3("Sahil Trivedi", cls='text-lg font-semibold'),
+            P("Web Developer", cls='text-gray-600'),
+            cls='text-center mb-4'
+        ),
+        cls='p-6'
+    ),
+    cls='fixed top-0 left-0 h-full w-64 bg-white shadow-lg overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out z-50'
+)`,
+  },
 ];
 
 describe("html2ft", () => {

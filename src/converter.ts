@@ -60,6 +60,7 @@ export function html2ft(html: string, attr1st: boolean = false): string {
 
     for (const key of elmAttrs) {
       const value = el.getAttribute(key);
+
       if (typeof value === "undefined") {
         continue;
       }
@@ -67,13 +68,16 @@ export function html2ft(html: string, attr1st: boolean = false): string {
       const mappedKey = revMap[key] || key;
       const formattedKey = mappedKey.replace(/-/g, "_");
 
+      // clean up value by removing extra spaces and newlines
+      const cleanedValue = value.trim().replace(/\s+/g, " ");
+
       if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(formattedKey)) {
         attrs.push(
-          `${formattedKey}=${JSON.stringify(value).replaceAll('"', "'")}`
+          `${formattedKey}=${JSON.stringify(cleanedValue).replaceAll('"', "'")}`
         );
       } else {
         attrs.push(
-          `**{${JSON.stringify(key)}: ${JSON.stringify(value).replaceAll(
+          `**{${JSON.stringify(key)}: ${JSON.stringify(cleanedValue).replaceAll(
             '"',
             "'"
           )}}`

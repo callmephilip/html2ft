@@ -13,3 +13,7 @@ All notable changes to the "html2ft" extension will be documented in this file.
 ## 0.3.0
 
 Support extension settings
+
+## 0.4.0
+
+New converter
