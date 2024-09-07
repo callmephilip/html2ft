@@ -1,11 +1,12 @@
-import { JSDOM } from "jsdom";
+import { parse, HTMLElement, Node } from "node-html-parser";
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
+const listAttributes = (el: HTMLElement): string[] =>
+  Object.keys(el.attributes);
+
 export function html2ft(html: string, attr1st: boolean = false): string {
   const revMap: { [key: string]: string } = { class: "cls", for: "fr" };
-
-  const dom = new JSDOM(html.trim());
 
   function _parse(
     elm: any,
@@ -23,7 +24,7 @@ export function html2ft(html: string, attr1st: boolean = false): string {
         .join("\n");
     }
 
-    if (!(elm instanceof dom.window.Element)) {
+    if (!(elm instanceof Node)) {
       return null;
     }
 
@@ -32,12 +33,19 @@ export function html2ft(html: string, attr1st: boolean = false): string {
       return null;
     }
 
-    const tagName = elm.tagName.toLowerCase().replace(/-/g, "_");
+    if (elm.nodeType !== 1) {
+      // element node
+      return null;
+    }
 
-    const cts = Array.from(elm.childNodes);
+    const el = elm as HTMLElement;
+
+    const tagName = el.tagName.toLowerCase().replace(/-/g, "_");
+
+    const cts = elm.childNodes;
     const cs = cts
       .map((c) =>
-        c instanceof dom.window.Text
+        c.nodeType === 3 // text node
           ? c.textContent?.trim().length
             ? JSON.stringify(c.textContent?.trim())
             : null
@@ -46,14 +54,13 @@ export function html2ft(html: string, attr1st: boolean = false): string {
       .filter((c) => c);
 
     const attrs: string[] = [];
-    const elmAttrs = elm
-      .getAttributeNames()
-      // class goes last
-      .sort((a, b) => (a === "class" ? 1 : b === "class" ? -1 : 0));
+    const elmAttrs = listAttributes(el).sort((a, b) =>
+      a === "class" ? 1 : b === "class" ? -1 : 0
+    );
 
     for (const key of elmAttrs) {
-      const value = elm.getAttribute(key);
-      if (value === null) {
+      const value = el.getAttribute(key);
+      if (typeof value === "undefined") {
         continue;
       }
 
@@ -76,7 +83,7 @@ export function html2ft(html: string, attr1st: boolean = false): string {
 
     const spc = " ".repeat(lvl * indent);
     const onlychild =
-      !cts.length || (cts.length === 1 && cts[0] instanceof dom.window.Text);
+      !cts.length || (cts.length === 1 && cts[0].nodeType === 3); // text node (nodeType === 3)
     const j = onlychild ? ", " : `,\n${spc}`;
     const inner = [...cs, ...attrs].filter(Boolean).join(j);
 
@@ -99,23 +106,24 @@ export function html2ft(html: string, attr1st: boolean = false): string {
   }
 
   // figure out what actual input should be
-  // jsdom will include all the standard html tags (html, head, body)
-  // even if original HTML do not have them
-  // our mission here is to clean things up
-
   // by default, send everything
-  let input: any = Array.from(dom.window.document.body.childNodes);
+  const dom = parse(html.trim());
+
+  let input: any = dom.childNodes[0];
 
   if (html.match(/html/gi)) {
-    input = Array.from(dom.window.document.childNodes);
+    input = dom.childNodes;
   } else if (html.match(/body/gi)) {
     input = [];
 
-    if (dom.window.document.head) {
-      input.push(dom.window.document.head);
+    const head = dom.childNodes.find((c) => c.rawTagName === "head");
+    const body = dom.childNodes.find((c) => c.rawTagName === "body");
+
+    if (head) {
+      input.push(head);
     }
 
-    input.push(dom.window.document.body);
+    input.push(body);
   }
 
   return _parse(input, 1) || "";
