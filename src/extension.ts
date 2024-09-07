@@ -21,7 +21,10 @@ export function activate(context: vscode.ExtensionContext) {
       const originalText = document.getText(selection);
 
       try {
-        const convertedText = html2ft(originalText);
+        const convertedText = html2ft(
+          originalText,
+          vscode.workspace.getConfiguration("html2ft").get("attrs1st")
+        );
         editor.edit((editBuilder) => {
           editBuilder.replace(selection, convertedText);
         });

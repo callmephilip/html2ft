@@ -9,3 +9,7 @@ All notable changes to the "html2ft" extension will be documented in this file.
 ## 0.2.0
 
 - Run conversion locally
+
+## 0.3.0
+
+Support extension settings
