@@ -35,3 +35,7 @@ Support extension settings
 ### 0.4.0
 
 New converter
+
+### 0.5.0
+
+Relax VS code version requirements
