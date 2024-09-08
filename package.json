@@ -51,11 +51,9 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
     "@types/mocha": "^10.0.7",
     "@types/node": "~20.16.5",
-    "@types/node-fetch": "^2.6.11",
-    "@types/vscode": "^1.93.0",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.4.0",
     "@vscode/test-cli": "^0.0.10",
