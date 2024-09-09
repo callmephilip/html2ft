@@ -5,6 +5,8 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const listAttributes = (el: HTMLElement): string[] =>
   Object.keys(el.attributes);
 
+const wrapSvg = (svg: string): string => `NotStr("""${svg}""")`;
+
 export function html2ft(html: string, attr1st: boolean = false): string {
   const revMap: { [key: string]: string } = { class: "cls", for: "fr" };
 
@@ -41,6 +43,11 @@ export function html2ft(html: string, attr1st: boolean = false): string {
     const el = elm as HTMLElement;
 
     const tagName = el.tagName.toLowerCase().replace(/-/g, "_");
+
+    // XX: a bit of a shortcut here for SVGs
+    if (tagName === "svg") {
+      return wrapSvg(el.toString());
+    }
 
     const cts = elm.childNodes;
     const cs = cts
