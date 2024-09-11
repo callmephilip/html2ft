@@ -2,7 +2,7 @@
 
 This extension converts HTML code to FT Python code to use with FastHTML
 
-![Screenshot](./images/screenshot.jpg)
+![Screenshot](./images/html2tf.gif)
 
 ## Requirements
 
