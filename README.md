@@ -43,3 +43,7 @@ Relax VS code version requirements
 ### 0.6.0
 
 Improve SVG handling
+
+### 0.7.0
+
+Improve code formatting

@@ -25,3 +25,7 @@ All notable changes to the "html2ft" extension will be documented in this file.
 ## 0.6.0
 
 - Improve SVG handling
+
+## 0.7.0
+
+- Improve code formatting
