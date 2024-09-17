@@ -1,20 +1,22 @@
-# HTML2FT
+<div align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=PhilipNuzhnyi.html2ft">
+    <img src="./html2ft.png" alt="ACS" width="100" />
+  </a>
+</div>
+
+<h1 align="center">HTML2FT</h1>
 
 This extension converts HTML code to FT Python code to use with FastHTML
 
 ![Screenshot](./images/html2tf.gif)
 
-## Requirements
-
-None
-
 ## Extension Settings
 
-No settings at the moment
+- attributes VS children first
 
-## Known Issues
+## Credits
 
-N/A
+- logo designed by DallE
 
 ## Release Notes
 
