@@ -122,9 +122,11 @@ export function html2ft(html: string, attr1st: boolean = false): string {
 
   let input: any = dom.childNodes[0];
 
-  if (html.match(/html/gi)) {
+  if (html.match(/<html>/gi)) {
     input = dom.childNodes;
-  } else if (html.match(/body/gi)) {
+  } else if (
+    dom.childNodes.find((c) => ["head", "body"].indexOf(c.rawTagName) !== -1)
+  ) {
     input = [];
 
     const head = dom.childNodes.find((c) => c.rawTagName === "head");

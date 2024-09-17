@@ -182,6 +182,12 @@ Body(
     cls='fixed top-0 left-0 h-full w-64 bg-white shadow-lg overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out z-50'
 )`,
   },
+  {
+    description: "html, head, body name clashes",
+    input: `<div>this mentions html and head and body</div>`,
+    attr1st: false,
+    expected: `Div("this mentions html and head and body")`,
+  },
 ];
 
 describe("html2ft", () => {
