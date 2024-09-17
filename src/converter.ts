@@ -120,11 +120,9 @@ export function html2ft(html: string, attr1st: boolean = false): string {
   // by default, send everything
   const dom = parse(html.trim());
 
-  let input: any = dom.childNodes[0];
+  let input: any = dom.childNodes;
 
-  if (html.match(/<html>/gi)) {
-    input = dom.childNodes;
-  } else if (
+  if (
     dom.childNodes.find((c) => ["head", "body"].indexOf(c.rawTagName) !== -1)
   ) {
     input = [];

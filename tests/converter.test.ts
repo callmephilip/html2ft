@@ -188,6 +188,23 @@ Body(
     attr1st: false,
     expected: `Div("this mentions html and head and body")`,
   },
+  {
+    description: "some head scripts",
+    input: `
+    <script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js"></script>
+    <script type="module" src="https://unpkg.com/franken-wc@0.0.6/dist/js/wc.iife.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/franken-wc@0.0.6/dist/css/blue.min.css">`,
+    attr1st: false,
+    expected: `Script(type='module', src='https://cdn.jsdelivr.net/npm/zero-md@3?register')
+Script(src='https://cdn.tailwindcss.com')
+Script(src='https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit.min.js')
+Script(src='https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js')
+Script(type='module', src='https://unpkg.com/franken-wc@0.0.6/dist/js/wc.iife.js')
+Link(rel='stylesheet', href='https://unpkg.com/franken-wc@0.0.6/dist/css/blue.min.css')`,
+  },
 ];
 
 describe("html2ft", () => {
