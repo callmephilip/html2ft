@@ -52,7 +52,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.7",
+    "@types/mocha": "^10.0.8",
     "@types/node": "~20.16.5",
     "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
