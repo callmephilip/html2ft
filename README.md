@@ -49,3 +49,8 @@ Improve SVG handling
 ### 0.7.0
 
 Improve code formatting
+
+## Release flow
+
+- create a tag (e.g. `git tag 0.6.2`)
+- `git push origin --tags`
