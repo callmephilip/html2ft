@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=PhilipNuzhnyi.html2ft">
-    <img src="./html2ft.png" alt="ACS" width="100" />
+    <img src="./html2ft.png" alt="HTML2FT" width="100" />
   </a>
 </div>
 
