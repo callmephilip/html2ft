@@ -17,6 +17,7 @@ jobs:
       - name: Test
         run: pnpm test
       - name: Publish to Visual Studio Marketplace
+        working-directory: ./packages/vscode-html2ft
         if: |
           github.repository == 'callmephilip/html2ft' &&
           startsWith(github.ref, 'refs/tags/')

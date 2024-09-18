@@ -6,6 +6,6 @@ updates:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /
+    directory: /packages/vscode-html2ft
     schedule:
       interval: daily

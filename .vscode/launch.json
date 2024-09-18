@@ -13,7 +13,7 @@
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [
-				"${workspaceFolder}/out/**/*.js"
+				"${workspaceFolder}/packages/vscode-html2ft/out/**/*.js"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
 		}
