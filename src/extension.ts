@@ -10,17 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
 
-  // XX: keeping this here for posterity
-  // const getCurrentSelectionStartCol = (editor: vscode.TextEditor) => {
-  //   // re: https://stackoverflow.com/questions/64791832/vscode-how-can-i-determine-the-cursors-column-position-within-an-editor
-  //   let offset = editor.document.offsetAt(editor.selection.start);
-  //   const line = editor.selection.start.line;
-  //   for (let i = 0; i < line; i++) {
-  //     offset -= editor.document.lineAt(i).text.length + 1;
-  //   }
-  //   return offset;
-  // };
-
   const countSpaces = (editor: vscode.TextEditor) => {
     return editor.document
       .lineAt(editor.selection.start.line)
