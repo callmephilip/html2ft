@@ -68,6 +68,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "node-html-parser": "^6.1.13"
+    "node-html-parser": "github:callmephilip/node-html-parser#handle-attrs-with-dots"
   }
 }
