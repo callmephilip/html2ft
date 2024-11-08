@@ -50,6 +50,12 @@ Improve SVG handling
 
 Improve code formatting
 
+## 0.8.0
+
+- Correctly parse alpinejs attrs like `x-transition.opacity.duration.600ms`
+- Group kw args into 1 dictionary `Div(**{'x-transition.opacity.duration.600ms': True},  **{'x-transition.scale.origin.top': True})` becomes `Div(**{'x-transition.opacity.duration.600ms': True, 'x-transition.scale.origin.top': True})`
+
+
 ## Release flow
 
 - local build (for testing): `npm upgrade && pnpm vsce package`
