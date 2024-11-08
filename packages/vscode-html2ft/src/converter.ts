@@ -65,8 +65,10 @@ export function html2ft(html: string, attr1st: boolean = false): string {
       a === "class" ? 1 : b === "class" ? -1 : 0
     );
 
+    const kws: { [key: string]: string } = {};
+
     for (const key of elmAttrs) {
-      const value = el.getAttribute(key);
+      let value = el.getAttribute(key);
 
       if (typeof value === "undefined") {
         continue;
@@ -78,18 +80,35 @@ export function html2ft(html: string, attr1st: boolean = false): string {
       // clean up value by removing extra spaces and newlines
       const cleanedValue = value.trim().replace(/\s+/g, " ");
 
+      const serializeValue = (v: string) => {
+        if (v === "True" || v === "False") {
+          return v;
+        }
+        return JSON.stringify(cleanedValue).replaceAll('"', "'");
+      };
+
       if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(formattedKey)) {
-        attrs.push(
-          `${formattedKey}=${JSON.stringify(cleanedValue).replaceAll('"', "'")}`
-        );
+        // "standard" looking attributes just get pushed in as key=value
+        attrs.push(`${formattedKey}=${serializeValue(cleanedValue)}`);
       } else {
-        attrs.push(
-          `**{${JSON.stringify(key)}: ${JSON.stringify(cleanedValue).replaceAll(
-            '"',
-            "'"
-          )}}`
-        );
+        // for anything wild looking (i.e. "x-transition.opacity.duration.600ms"), let's get them all together in a dictionary
+        // and then include them via **{...} python dictionary spread
+        kws[key] = serializeValue(cleanedValue !== "" ? cleanedValue : "True");
       }
+    }
+
+    if (Object.keys(kws).length) {
+      // got kws? throw them in to attrs all in one go
+      attrs.push(
+        `**{${Object.keys(kws)
+          .reduce(
+            (acc, key) =>
+              acc +
+              `, ${JSON.stringify(key).replaceAll('"', "'")}: ${kws[key]}`,
+            ""
+          )
+          .replace(/^,\s/, "")}}`
+      );
     }
 
     const spc = " ".repeat(lvl * indent);

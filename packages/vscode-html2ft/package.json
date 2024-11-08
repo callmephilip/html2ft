@@ -2,7 +2,7 @@
   "name": "html2ft",
   "displayName": "html2ft",
   "description": "Convert HTML to FastHTML FT",
-  "version": "0.7.9",
+  "version": "0.8.0",
   "publisher": "PhilipNuzhnyi",
   "repository": "https://github.com/callmephilip/html2ft",
   "license": "MIT",
@@ -68,6 +68,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "node-html-parser": "^6.1.13"
+    "node-html-parser": "github:callmephilip/node-html-parser#handle-attrs-with-dots"
   }
 }

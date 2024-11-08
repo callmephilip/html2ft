@@ -205,6 +205,70 @@ Script(src='https://cdn.jsdelivr.net/npm/uikit@3.21.6/dist/js/uikit-icons.min.js
 Script(type='module', src='https://unpkg.com/franken-wc@0.0.6/dist/js/wc.iife.js')
 Link(rel='stylesheet', href='https://unpkg.com/franken-wc@0.0.6/dist/css/blue.min.css')`,
   },
+  {
+    description: "funky alpinejs attributes",
+    input:
+      "<div x-transition.opacity.duration.600ms x-transition.scale.origin.top><p>hello</p></div>",
+    expected: `Div(
+    P("hello"),
+    **{'x-transition.opacity.duration.600ms': True, 'x-transition.scale.origin.top': True}
+)`,
+  },
+  {
+    description: "funky alpinejs attributes, attrs first",
+    input:
+      "<div x-transition.opacity.duration.600ms x-transition.scale.origin.top><p>hello</p></div>",
+    attr1st: true,
+    expected: `Div(**{'x-transition.opacity.duration.600ms': True, 'x-transition.scale.origin.top': True})(
+    P("hello")
+)`,
+  },
+  {
+    description: "moar aplinejs",
+    input: `<div x-data="{ open: false }">
+        <button @click="open = ! open">Toggle</button>
+    
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+        >Hello 👋</div>
+    </div>`,
+    expected: `Div(
+    Button("Toggle", **{'@click': 'open = ! open'}),
+    Div("Hello 👋", x_show='open', **{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 scale-90', 'x-transition:enter-end': 'opacity-100 scale-100', 'x-transition:leave': 'transition ease-in duration-300', 'x-transition:leave-start': 'opacity-100 scale-100', 'x-transition:leave-end': 'opacity-0 scale-90'}),
+    x_data='{ open: false }'
+)`,
+  },
+  {
+    description: "moar aplinejs attr1st",
+    input: `<div x-data="{ open: false }">
+        <button @click="open = ! open"><span>Toggle</span></button>
+
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+        ><span>Hello 👋</span></div>
+    </div>`,
+    attr1st: true,
+    expected: `Div(x_data='{ open: false }')(
+    Button(**{'@click': 'open = ! open'})(
+        Span("Toggle")
+    ),
+    Div(x_show='open', **{'x-transition:enter': 'transition ease-out duration-300', 'x-transition:enter-start': 'opacity-0 scale-90', 'x-transition:enter-end': 'opacity-100 scale-100', 'x-transition:leave': 'transition ease-in duration-300', 'x-transition:leave-start': 'opacity-100 scale-100', 'x-transition:leave-end': 'opacity-0 scale-90'})(
+        Span("Hello 👋")
+    )
+)`,
+  },
 ];
 
 describe("html2ft", () => {
