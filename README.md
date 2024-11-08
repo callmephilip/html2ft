@@ -52,5 +52,6 @@ Improve code formatting
 
 ## Release flow
 
+- local build (for testing): `npm upgrade && pnpm vsce package`
 - create a tag (e.g. `git tag 0.6.2`)
 - `git push origin --tags`
