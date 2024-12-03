@@ -62,7 +62,7 @@
     "esbuild": "^0.24.0",
     "eslint": "^9.10.0",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.1",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
